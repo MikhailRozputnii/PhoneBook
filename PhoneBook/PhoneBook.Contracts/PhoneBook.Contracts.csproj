@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PhoneBook.Domains\PhoneBook.Domains.csproj" />
+  </ItemGroup>
+
 </Project>
