@@ -2,7 +2,7 @@
 using PhoneBook.Repositories.Data;
 using System;
 
-namespace PhoneBook.Repositories.Service
+namespace PhoneBook.Repositories.Services
 {
     public class RepositoryWrapper : IRepositoryWrapper
     {
