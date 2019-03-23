@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PhoneBook.BusinessLogic.DTO;
+using PhoneBook.BusinessLogic.Extensions;
 using PhoneBook.Repositories.Extensions;
+using System;
 
 namespace PhoneBook
 {
@@ -20,6 +24,29 @@ namespace PhoneBook
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddPhoneBookDbContext(Configuration);
+
+            services.AddIdentityCore<UserDto>()
+               .AddSignInManager()
+               .AddDefaultTokenProviders();
+
+            services.AddCustomIdentityProvider();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequiredUniqueChars = 2;
+
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.AllowedForNewUsers = true;
+
+                options.User.RequireUniqueEmail = true;
+            });
+
             services.AddRepositoryWrapper();
 
             services.AddMvc();
