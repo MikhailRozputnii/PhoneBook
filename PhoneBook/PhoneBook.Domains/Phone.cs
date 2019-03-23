@@ -1,9 +1,8 @@
-﻿using PhoneBook.Contracts;
-using System;
+﻿using System;
 
 namespace PhoneBook.Domains
 {
-    public class Phone : IEntity
+    public class Phone
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
