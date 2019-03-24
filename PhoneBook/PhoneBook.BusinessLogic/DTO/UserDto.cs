@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PhoneBook.Domains
+namespace PhoneBook.BusinessLogic.DTO
 {
-    public class User 
+    public class UserDto
     {
-        public Guid Id { get; set; } 
+        public Guid Id { get; set; }
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public bool IsDeleted { get; set; }
-
-        public IEnumerable<Phone> Phones { get; set; }
+        public IEnumerable<PhoneDto> Phones { get; set; }
     }
 }

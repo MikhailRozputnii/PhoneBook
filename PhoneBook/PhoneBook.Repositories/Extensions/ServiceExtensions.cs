@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PhoneBook.Contracts;
-using PhoneBook.Repositories.Service;
+using PhoneBook.Repositories.Services;
 
 namespace PhoneBook.Repositories.Extensions
 {

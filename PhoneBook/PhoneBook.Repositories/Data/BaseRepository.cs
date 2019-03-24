@@ -31,6 +31,11 @@ namespace PhoneBook.Repositories.Data
             return _dbContext.Set<T>().Where(expression);
         }
 
+        public T GetUserByCondition(Expression<Func<T, bool>> expression)
+        {
+            return _dbContext.Set<T>().FirstOrDefault(expression);
+        }
+
         public void Update(T entity)
         {
             _dbContext.Set<T>().Update(entity);

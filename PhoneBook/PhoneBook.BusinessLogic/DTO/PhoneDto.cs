@@ -1,15 +1,14 @@
 ﻿using System;
 
-namespace PhoneBook.Domains
+namespace PhoneBook.BusinessLogic.DTO
 {
-    public class Phone
+    public class PhoneDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string Description { get; set; }
         public DateTime CreateDate { get; set; }
-
-        public User User { get; set; }
+        public UserDto User { get; set; }
     }
 }
