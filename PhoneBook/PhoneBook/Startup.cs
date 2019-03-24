@@ -56,7 +56,7 @@ namespace PhoneBook
             }).AddIdentityCookies(o => { });
 
             services.AddRepositoryWrapper();
-
+            services.AddPhoneService();
             services.AddMvc();
         }
 
