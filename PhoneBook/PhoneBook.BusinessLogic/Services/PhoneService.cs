@@ -4,6 +4,7 @@ using PhoneBook.BusinessLogic.DTO;
 using PhoneBook.Contracts;
 using PhoneBook.Domains;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PhoneBook.BusinessLogic.Services
@@ -17,9 +18,10 @@ namespace PhoneBook.BusinessLogic.Services
             _mapper = mapper;
             _repositoryWrapper = repositoryWrapper;
         }
+
         public PhoneDto Create(PhoneDto phoneDto, Guid userId)
         {
-            var result = SearchPhone(phoneDto, userId);
+            var result = GetPhone(phoneDto, userId);
             if (result == null)
             {
                 var entity = _mapper.Map<Phone>(phoneDto);
@@ -32,16 +34,25 @@ namespace PhoneBook.BusinessLogic.Services
             return result;
         }
 
-        private bool IsExistsUser(Guid userId)
+        public (IEnumerable<PhoneDto>, int) GetPhones(ref int curentPage, int pageSize, string search, Guid userId)
         {
-            if (userId == Guid.Empty)
-                return false;
-            return _repositoryWrapper.User.GetModelByCondition(i => i.Id == userId) != null;
+            
+            var query = _repositoryWrapper.Phone.GetByCondition(i => i.UserId == userId);
+            var result = _mapper.Map<IEnumerable<PhoneDto>>(query);
+            var count = result.Count();
+            if (!string.IsNullOrEmpty(search))
+            {
+                result = Search(search, userId);
+                count = result.Count();
+            }
+            result = FilterPage(result, curentPage, pageSize);
+            return (result, count);
         }
 
-        private PhoneDto SearchPhone(PhoneDto phoneDto, Guid userId)
+
+        private PhoneDto GetPhone(PhoneDto phoneDto, Guid userId)
         {
-            if (phoneDto != null && IsExistsUser(userId))
+            if (phoneDto != null && IsExistsModel(userId))
             {
                 var result = _repositoryWrapper.Phone.GetByCondition(i => i.UserId == userId)
                                                              .Where(i => i.Name == phoneDto.Name
@@ -52,6 +63,27 @@ namespace PhoneBook.BusinessLogic.Services
                 }
             }
             return null;
+        }
+
+        private bool IsExistsModel(Guid userId)
+        {
+            if (userId == Guid.Empty)
+                return false;
+            return _repositoryWrapper.User.GetModelByCondition(i => i.Id == userId) != null;
+        }
+
+        private IEnumerable<PhoneDto> Search(string search, Guid userId)
+        {
+            var result = _repositoryWrapper.Phone.GetByCondition(i => i.UserId == userId).Where(u => u.Name.Contains(search) ||
+                       u.PhoneNumber.Contains(search));
+            var resultDto = _mapper.Map<IEnumerable<PhoneDto>>(result);
+            return resultDto;
+        }
+
+        private IEnumerable<PhoneDto>FilterPage(IEnumerable<PhoneDto> phones, int skip, int take)
+        {
+            return phones.Skip((skip - 1) * take).
+                Take(take).ToList();
         }
     }
 }
