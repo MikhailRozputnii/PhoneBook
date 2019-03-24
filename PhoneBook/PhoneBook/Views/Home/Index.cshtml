@@ -1,7 +1,52 @@
-﻿
+﻿@model IndexViewModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Контактная книга";
+}    <h1>Список пользователей</h1>
+@using (Html.BeginForm("Index", "User", FormMethod.Post))
+{
+    <p>
+        @Html.EditorFor(model => model.Search)
+        <input asp-action="Index" asp-route-model.CurrentPage="@(Model.Search)" type="submit" value="search" class="btn btn-default" /> |
+        <a asp-action="Index">Back to Full List</a>
+    </p>
+    <p>
+        @Html.ActionLink("Create", "Create", "Phone", null,  new { @class = "btn btn-success" })
+    </p>
 }
-
-<h2>Index</h2>
-
+<table class="table table-striped">
+    <tr style="background-color:#808080"><th>Дата</th><th>Номер телефона</th><th>Имя абонента</th><th>Дополнительная информация</th><th>Операции</th></tr>
+    @if (Model.PageViewModel != null)
+    {
+        foreach (PhoneViewModel u in Model.Phones)
+        {
+            <tr>
+                <td>@u.CreateDate</td>
+                <td>@u.PhoneNumber</td>
+                <td>@u.Name</td>
+                <td>@u.Description</td>
+                <td>
+                    @Html.ActionLink("Добавить","Delete", "Phone", new { id = u.Id }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+    }
+</table>
+<br />
+@if (Model.PageViewModel.HasPreviousPage)
+{
+    <a asp-action="Index"
+       asp-route-model.CurrentPage="@(Model.PageViewModel.PageNumber - 1)"
+       class="btn btn-default btn">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+        Back
+    </a>
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="Index"
+       asp-route-model.CurrentPage="@(Model.PageViewModel.PageNumber + 1)"
+       class="btn btn-default btn">
+        Next
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+}
