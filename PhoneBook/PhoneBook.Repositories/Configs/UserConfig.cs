@@ -17,6 +17,9 @@ namespace PhoneBook.Repositories.Configs
             builder.HasIndex(u => u.Email)
                .IsUnique();
 
+            builder.Property(u => u.NormalizedEmail)
+              .HasMaxLength(50);
+
             builder.HasQueryFilter(x => x.IsDeleted == false);
         }
     }
