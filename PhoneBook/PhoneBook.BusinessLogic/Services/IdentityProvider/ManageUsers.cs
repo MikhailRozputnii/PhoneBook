@@ -26,7 +26,7 @@ namespace PhoneBook.BusinessLogic.Services.IdentityProvider
                 var entity = _mapper.Map<User>(userDto);
                 _repositoryWrapper.User.Create(entity);
                 _repositoryWrapper.Save();
-                var isExists = _repositoryWrapper.User.GetUserByCondition(i => i.Email == userDto.Email) != null;
+                var isExists = _repositoryWrapper.User.GetModelByCondition(i => i.Email == userDto.Email) != null;
                 if (isExists)
                 {
                     return IdentityResult.Success;
@@ -38,7 +38,7 @@ namespace PhoneBook.BusinessLogic.Services.IdentityProvider
 
         public async Task<IdentityResult> DeleteAsync(UserDto userDto)
         {
-            var entity = _repositoryWrapper.User.GetUserByCondition(i => i.Id == userDto.Id);
+            var entity = _repositoryWrapper.User.GetModelByCondition(i => i.Id == userDto.Id);
             if (entity != null)
             {
                 entity.IsDeleted = true;
@@ -52,14 +52,14 @@ namespace PhoneBook.BusinessLogic.Services.IdentityProvider
 
         public async Task<UserDto> FindByIdAsync(Guid userId)
         {
-            var entity = _repositoryWrapper.User.GetUserByCondition(i => i.Id == userId);
+            var entity = _repositoryWrapper.User.GetModelByCondition(i => i.Id == userId);
             var userDto = _mapper.Map<UserDto>(entity);
             return userDto;
         }
 
         public async Task<IdentityResult> UpdateAsync(UserDto userDto)
         {
-            var entity = _repositoryWrapper.User.GetUserByCondition(i => i.Id == userDto.Id);
+            var entity = _repositoryWrapper.User.GetModelByCondition(i => i.Id == userDto.Id);
             if (entity != null)
             {
                 entity.Email = userDto.Email;
@@ -74,7 +74,7 @@ namespace PhoneBook.BusinessLogic.Services.IdentityProvider
 
         public async Task<UserDto> FindByEmailAsync(string email)
         {
-            var entity = _repositoryWrapper.User.GetUserByCondition(i => i.Email == email);
+            var entity = _repositoryWrapper.User.GetModelByCondition(i => i.Email == email);
             var userDto = _mapper.Map<UserDto>(entity);
             return userDto;
         }
