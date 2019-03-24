@@ -35,7 +35,7 @@ namespace PhoneBook.Repositories.Data
             return null;
         }
 
-        public T GetUserByCondition(Expression<Func<T, bool>> expression)
+        public T GetModelByCondition(Expression<Func<T, bool>> expression)
         {
             if (expression != null)
                 return _dbContext.Set<T>().FirstOrDefault(expression);
