@@ -10,7 +10,8 @@
         <a asp-action="Index">Back to Full List</a>
     </p>
     <p>
-        @Html.ActionLink("Create", "Create", "Phone", null,  new { @class = "btn btn-success" })
+        @Html.ActionLink("Добавить", "Create", "Phone", null, new { @class = "btn btn-success" })
+        <input type="button" class="btn btn-danger" value="Очистить">
     </p>
 }
 <table class="table table-striped">
@@ -25,7 +26,7 @@
                 <td>@u.Name</td>
                 <td>@u.Description</td>
                 <td>
-                    @Html.ActionLink("Добавить","Delete", "Phone", new { id = u.Id }, new { @class = "btn btn-danger" })
+                    @Html.ActionLink("Удалить", "Delete", "Phone", new { phoneId = u.Id }, new { @class = "btn btn-danger" })
                 </td>
             </tr>
         }
