@@ -18,27 +18,34 @@ namespace PhoneBook.Repositories.Data
 
         public void Create(T entity)
         {
-            _dbContext.Set<T>().Add(entity);
+            if (entity != null)
+                _dbContext.Set<T>().Add(entity);
         }
 
         public void Delete(T entity)
         {
-            _dbContext.Set<T>().Remove(entity);
+            if (entity != null)
+                _dbContext.Set<T>().Remove(entity);
         }
 
         public IEnumerable<T> GetByCondition(Expression<Func<T, bool>> expression)
         {
-            return _dbContext.Set<T>().Where(expression);
+            if (expression != null)
+                return _dbContext.Set<T>().Where(expression);
+            return null;
         }
 
         public T GetUserByCondition(Expression<Func<T, bool>> expression)
         {
-            return _dbContext.Set<T>().FirstOrDefault(expression);
+            if (expression != null)
+                return _dbContext.Set<T>().FirstOrDefault(expression);
+            return null;
         }
 
         public void Update(T entity)
         {
-            _dbContext.Set<T>().Update(entity);
+            if (entity != null)
+                _dbContext.Set<T>().Update(entity);
         }
     }
 }
