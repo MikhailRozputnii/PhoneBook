@@ -64,7 +64,7 @@ namespace PhoneBook.BusinessLogic.Services.IdentityProvider
             {
                 throw new ArgumentNullException(nameof(userDto));
             }
-            return Task.FromResult(userDto.Email);
+            return Task.FromResult(userDto.NormalizedEmail);
         }
 
         public Task<string> GetUserIdAsync(UserDto userDto, CancellationToken cancellationToken)
@@ -89,7 +89,7 @@ namespace PhoneBook.BusinessLogic.Services.IdentityProvider
             if (userDto == null) throw new ArgumentNullException(nameof(userDto));
             if (normalizedName == null) throw new ArgumentNullException(nameof(normalizedName));
 
-            userDto.Email = normalizedName;
+            userDto.NormalizedEmail = normalizedName;
             return Task.FromResult<object>(null);
         }
 
