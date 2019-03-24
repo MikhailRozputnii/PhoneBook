@@ -1,0 +1,8 @@
+﻿@model PhoneViewModel
+@{
+    ViewData["Title"] = "Delete";
+}
+<h2>Вы хотите удалить запись @Model.Name, вы уверенны?</h2>
+<hr />
+<p />
+@Html.ActionLink("Удалить", "ConfirmDelete", "Phone", new { phoneId = Model.Id }, new { @class = "btn btn-danger" })
