@@ -36,7 +36,7 @@ namespace PhoneBook.BusinessLogic.Services
 
         public (IEnumerable<PhoneDto>, int) GetPhones(ref int curentPage, int pageSize, string search, Guid userId)
         {
-            
+
             var query = _repositoryWrapper.Phone.GetByCondition(i => i.UserId == userId);
             var result = _mapper.Map<IEnumerable<PhoneDto>>(query);
             var count = result.Count();
@@ -49,10 +49,25 @@ namespace PhoneBook.BusinessLogic.Services
             return (result, count);
         }
 
+        public PhoneDto GetPhone(Guid phoneId, Guid userId)
+        {
+            var phone = _repositoryWrapper.Phone.GetModelByCondition(i => i.UserId == userId && i.Id == phoneId);
+            var phoneDto = _mapper.Map<PhoneDto>(phone);
+            return phoneDto;
+        }
+
+        public void Delete(Guid phoneId, Guid userId)
+        {
+            var phone = _repositoryWrapper.Phone.GetModelByCondition(i => i.Id == phoneId && i.UserId == userId);
+            if (phone!=null) {
+                _repositoryWrapper.Phone.Delete(phone);
+                _repositoryWrapper.Save();
+            }
+        }
 
         private PhoneDto GetPhone(PhoneDto phoneDto, Guid userId)
         {
-            if (phoneDto != null && IsExistsModel(userId))
+            if (phoneDto != null && IsExistsModelWithUser(userId))
             {
                 var result = _repositoryWrapper.Phone.GetByCondition(i => i.UserId == userId)
                                                              .Where(i => i.Name == phoneDto.Name
@@ -65,7 +80,7 @@ namespace PhoneBook.BusinessLogic.Services
             return null;
         }
 
-        private bool IsExistsModel(Guid userId)
+        private bool IsExistsModelWithUser(Guid userId)
         {
             if (userId == Guid.Empty)
                 return false;
@@ -80,7 +95,7 @@ namespace PhoneBook.BusinessLogic.Services
             return resultDto;
         }
 
-        private IEnumerable<PhoneDto>FilterPage(IEnumerable<PhoneDto> phones, int skip, int take)
+        private IEnumerable<PhoneDto> FilterPage(IEnumerable<PhoneDto> phones, int skip, int take)
         {
             return phones.Skip((skip - 1) * take).
                 Take(take).ToList();
