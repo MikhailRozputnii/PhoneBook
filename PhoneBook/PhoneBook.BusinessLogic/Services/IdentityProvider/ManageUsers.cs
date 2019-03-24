@@ -25,6 +25,7 @@ namespace PhoneBook.BusinessLogic.Services.IdentityProvider
             {
                 var entity = _mapper.Map<User>(userDto);
                 _repositoryWrapper.User.Create(entity);
+                _repositoryWrapper.Save();
                 var isExists = _repositoryWrapper.User.GetUserByCondition(i => i.Email == userDto.Email) != null;
                 if (isExists)
                 {
@@ -42,6 +43,7 @@ namespace PhoneBook.BusinessLogic.Services.IdentityProvider
             {
                 entity.IsDeleted = true;
                 _repositoryWrapper.User.Update(entity);
+                _repositoryWrapper.Save();
                 return IdentityResult.Success;
             }
             return IdentityResult.Failed(new IdentityError { Description = $"Could not delete user {userDto.Email}." });
@@ -63,6 +65,7 @@ namespace PhoneBook.BusinessLogic.Services.IdentityProvider
                 entity.Email = userDto.Email;
                 entity.PasswordHash = userDto.PasswordHash;
                 _repositoryWrapper.User.Update(entity);
+                _repositoryWrapper.Save();
                 return IdentityResult.Success;
             }
             return IdentityResult.Failed(new IdentityError { Description = $"Could not update user {userDto.Email}." });
