@@ -10,7 +10,7 @@ using PhoneBook.Repositories.Data;
 namespace PhoneBook.Repositories.Migrations
 {
     [DbContext(typeof(PhoneBookDbContext))]
-    [Migration("20190323121227_init")]
+    [Migration("20190325100652_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,7 +38,7 @@ namespace PhoneBook.Repositories.Migrations
                         .IsRequired()
                         .HasMaxLength(15);
 
-                    b.Property<Guid?>("UserId");
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
 
@@ -58,6 +58,9 @@ namespace PhoneBook.Repositories.Migrations
 
                     b.Property<bool>("IsDeleted");
 
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(50);
+
                     b.Property<string>("PasswordHash")
                         .IsRequired();
 
@@ -73,7 +76,8 @@ namespace PhoneBook.Repositories.Migrations
                 {
                     b.HasOne("PhoneBook.Domains.User", "User")
                         .WithMany("Phones")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

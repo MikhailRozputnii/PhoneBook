@@ -36,7 +36,7 @@ namespace PhoneBook.Repositories.Migrations
                         .IsRequired()
                         .HasMaxLength(15);
 
-                    b.Property<Guid?>("UserId");
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
 
@@ -74,7 +74,8 @@ namespace PhoneBook.Repositories.Migrations
                 {
                     b.HasOne("PhoneBook.Domains.User", "User")
                         .WithMany("Phones")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

@@ -13,6 +13,7 @@ namespace PhoneBook.Repositories.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Email = table.Column<string>(maxLength: 40, nullable: false),
+                    NormalizedEmail = table.Column<string>(maxLength: 50, nullable: true),
                     PasswordHash = table.Column<string>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false)
                 },
@@ -30,7 +31,7 @@ namespace PhoneBook.Repositories.Migrations
                     PhoneNumber = table.Column<string>(maxLength: 15, nullable: false),
                     Description = table.Column<string>(maxLength: 254, nullable: true),
                     CreateDate = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: true)
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,7 +41,7 @@ namespace PhoneBook.Repositories.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
