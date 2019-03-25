@@ -36,32 +36,42 @@ namespace PhoneBook.BusinessLogic.Services
 
         public (IEnumerable<PhoneDto>, int) GetPhones(ref int curentPage, int pageSize, string search, Guid userId)
         {
-
-            var query = _repositoryWrapper.Phone.GetByCondition(i => i.UserId == userId);
-            var result = _mapper.Map<IEnumerable<PhoneDto>>(query);
-            var count = result.Count();
-            if (!string.IsNullOrEmpty(search))
-            {
-                result = Search(search, userId);
-                count = result.Count();
+            if (userId!=Guid.Empty) {
+                var query = _repositoryWrapper.Phone.GetByCondition(i => i.UserId == userId);
+                var result = _mapper.Map<IEnumerable<PhoneDto>>(query);
+                var count = result.Count();
+                if (!string.IsNullOrEmpty(search))
+                {
+                    result = Search(search, userId);
+                    count = result.Count();
+                }
+                result = FilterPage(result, curentPage, pageSize);
+                return (result, count);
             }
-            result = FilterPage(result, curentPage, pageSize);
-            return (result, count);
+            return (null, 0);
         }
 
         public PhoneDto GetPhone(Guid phoneId, Guid userId)
         {
-            var phone = _repositoryWrapper.Phone.GetModelByCondition(i => i.UserId == userId && i.Id == phoneId);
-            var phoneDto = _mapper.Map<PhoneDto>(phone);
-            return phoneDto;
+            if (userId != Guid.Empty && phoneId != Guid.Empty)
+            {
+                var phone = _repositoryWrapper.Phone.GetModelByCondition(i => i.UserId == userId && i.Id == phoneId);
+                var phoneDto = _mapper.Map<PhoneDto>(phone);
+                return phoneDto;
+            }
+            return null;
         }
 
         public void Delete(Guid phoneId, Guid userId)
         {
-            var phone = _repositoryWrapper.Phone.GetModelByCondition(i => i.Id == phoneId && i.UserId == userId);
-            if (phone!=null) {
-                _repositoryWrapper.Phone.Delete(phone);
-                _repositoryWrapper.Save();
+            if (userId != Guid.Empty && phoneId != Guid.Empty)
+            {
+                var phone = _repositoryWrapper.Phone.GetModelByCondition(i => i.Id == phoneId && i.UserId == userId);
+                if (phone != null)
+                {
+                    _repositoryWrapper.Phone.Delete(phone);
+                    _repositoryWrapper.Save();
+                }
             }
         }
 

@@ -16,9 +16,9 @@ namespace PhoneBook.Controllers
     {
         private readonly SignInManager<UserDto> _signInManager;
         private readonly UserManager<UserDto> _userManager;
-         private readonly IEmailSender _emailSender;
+        private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
-       
+
         public AccountController(
             UserManager<UserDto> userManager,
             SignInManager<UserDto> signInManager,
@@ -91,7 +91,7 @@ namespace PhoneBook.Controllers
                 {
                     _logger.LogInformation("User created a new account with password.");
                     _emailSender.SendEmail(model.Email, "Credential", $"Congratulations, you have successfully registered to PhoneBook. Your credentials: Login: {model.Email} Password: {model.Password}");
-                    await _signInManager.PasswordSignInAsync(model.Email, model.Password, true , lockoutOnFailure: false);
+                    await _signInManager.PasswordSignInAsync(model.Email, model.Password, true, lockoutOnFailure: false);
                     _logger.LogInformation("User created a new account with password.");
                     return RedirectToLocal(returnUrl);
                 }
