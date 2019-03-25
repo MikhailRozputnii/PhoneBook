@@ -89,6 +89,7 @@ namespace PhoneBook.BusinessLogic.Services
 
         private IEnumerable<PhoneDto> Search(string search, Guid userId)
         {
+            search = search.Trim(' ');
             var result = _repositoryWrapper.Phone.GetByCondition(i => i.UserId == userId).Where(u => u.Name.Contains(search) ||
                        u.PhoneNumber.Contains(search));
             var resultDto = _mapper.Map<IEnumerable<PhoneDto>>(result);

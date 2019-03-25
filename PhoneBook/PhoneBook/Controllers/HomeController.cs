@@ -33,7 +33,7 @@ namespace PhoneBook.Controllers
                 model.CurrentPage = 1;
             }
             int curent = model.CurrentPage;
-
+            model.Search = model.Search != null ? model.Search.Trim(' ') : model.Search;
             var curenUserId = _userManager.GetUserId(User);
             var items = _phoneService.GetPhones(ref curent, model.PageSize, model.Search, new Guid(curenUserId));
             var phones = items.Item1;
@@ -41,6 +41,7 @@ namespace PhoneBook.Controllers
             var phonesViewModel = _mapper.Map<IEnumerable<PhoneViewModel>>(phones);
 
             model.PageViewModel= new PageViewModel(total, model.PageSize, curent);
+         
             model.Phones = phonesViewModel;
             return View(model);
         }

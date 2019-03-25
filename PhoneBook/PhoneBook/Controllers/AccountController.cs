@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PhoneBook.BusinessLogic.Contracts;
 using PhoneBook.BusinessLogic.DTO;
 using PhoneBook.Models;
 using System.Threading.Tasks;
@@ -15,15 +16,18 @@ namespace PhoneBook.Controllers
     {
         private readonly SignInManager<UserDto> _signInManager;
         private readonly UserManager<UserDto> _userManager;
+         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
-
+       
         public AccountController(
             UserManager<UserDto> userManager,
             SignInManager<UserDto> signInManager,
+            IEmailSender emailSender,
             ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _emailSender = emailSender;
             _logger = logger;
         }
 
@@ -86,7 +90,8 @@ namespace PhoneBook.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    _emailSender.SendEmail(model.Email, "Credential", $"Congratulations, you have successfully registered to PhoneBook. Your credentials: Login: {model.Email} Password: {model.Password}");
+                    await _signInManager.PasswordSignInAsync(model.Email, model.Password, true , lockoutOnFailure: false);
                     _logger.LogInformation("User created a new account with password.");
                     return RedirectToLocal(returnUrl);
                 }
