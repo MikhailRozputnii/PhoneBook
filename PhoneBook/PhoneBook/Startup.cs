@@ -57,6 +57,7 @@ namespace PhoneBook
 
             services.AddRepositoryWrapper();
             services.AddPhoneService();
+            services.AddEmailSender();
             services.AddMvc();
         }
 

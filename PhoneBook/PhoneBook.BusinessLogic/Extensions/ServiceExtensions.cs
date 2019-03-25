@@ -10,5 +10,10 @@ namespace PhoneBook.BusinessLogic.Extensions
         {
             services.AddScoped<IPhoneService, PhoneService>();
         }
+
+        public static void AddEmailSender(this IServiceCollection services)
+        {
+            services.AddScoped<IEmailSender, EmailSender>();
+        }
     }
 }
