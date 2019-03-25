@@ -6,12 +6,11 @@
 {
     <p>
         @Html.EditorFor(model => model.Search)
-        <input asp-action="Index" asp-route-model.CurrentPage="@(Model.Search)" type="submit" value="search" class="btn btn-default" /> |
-        <a asp-action="Index">Back to Full List</a>
+        <input asp-action="Index" asp-route-model.CurrentPage="@(Model.Search)" type="submit" value="search" class="btn btn-default" /> 
     </p>
     <p>
         @Html.ActionLink("Добавить", "Create", "Phone", null, new { @class = "btn btn-success" })
-        <input type="button" class="btn btn-danger" value="Очистить">
+        @Html.ActionLink("Очистить", "Index", "Home", new { model = new IndexViewModel() }, new { @class = "btn btn-danger" }) 
     </p>
 }
 <table class="table table-striped">
